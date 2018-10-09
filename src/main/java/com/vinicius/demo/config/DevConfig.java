@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.vinicius.demo.services.DBService;
+import com.vinicius.demo.services.EmailService;
+import com.vinicius.demo.services.SmtpEmailService;
 
 //indica que esse arquivo é arquivo de configuração para 
 //o profile de dev application-dev.properties
@@ -38,6 +40,11 @@ public class DevConfig {
 		return true;
 		
 		}
+	}
+	
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 	
 	
