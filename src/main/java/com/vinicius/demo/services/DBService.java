@@ -20,6 +20,7 @@ import com.vinicius.demo.domain.PagamentoComCartao;
 import com.vinicius.demo.domain.Pedido;
 import com.vinicius.demo.domain.Produto;
 import com.vinicius.demo.domain.enums.EstadoPagamento;
+import com.vinicius.demo.domain.enums.Perfil;
 import com.vinicius.demo.domain.enums.TipoCliente;
 import com.vinicius.demo.repositories.CategoriaRepository;
 import com.vinicius.demo.repositories.CidadeRepository;
@@ -122,17 +123,23 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
-		Cliente cli1 = new Cliente(null, "Maria Silva", "vinicius.batistaoli@gmail.com", "87612345377", TipoCliente.PESSOAFISICA, pe.encode("123"));
+		Cliente cli1 = new Cliente(null, "Maria Silva", "vinicius.batistaoli@gmail.com", "99507760075", TipoCliente.PESSOAFISICA, pe.encode("123"));
 		cli1.getTelefones().addAll(Arrays.asList("33338764","989087765"));
 		
+		Cliente cli2 = new Cliente(null, "Ana Costa", "vinicius@gmail.com", "59774757050", TipoCliente.PESSOAFISICA, pe.encode("123"));
+		cli2.addPerfil(Perfil.ADMIN);
+		cli2.getTelefones().addAll(Arrays.asList("33334444","988770998"));
+
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Fundos", "São Joaquin", "8600087", cli1, c1);
 		Endereco e2 = new Endereco(null, "Rua Matos", "100", "Apt 18", "Centro", "8600877", cli1, c2);
-		
+		Endereco e3 = new Endereco(null, "Rua Viva", "2100", null, "Centro", "8600877", cli2, c2);
+
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
+
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
 		
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
