@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vinicius.demo.domain.Cidade;
 import com.vinicius.demo.domain.Cliente;
 import com.vinicius.demo.domain.Endereco;
+import com.vinicius.demo.domain.enums.Perfil;
 import com.vinicius.demo.domain.enums.TipoCliente;
 import com.vinicius.demo.dto.ClienteDTO;
 import com.vinicius.demo.dto.ClienteNewDTO;
 import com.vinicius.demo.repositories.ClienteRepository;
 import com.vinicius.demo.repositories.EnderecoRepository;
+import com.vinicius.demo.security.UserSS;
+import com.vinicius.demo.services.exceptions.AuthorizationException;
 import com.vinicius.demo.services.exceptions.DataIntegrityException;
 import com.vinicius.demo.services.exceptions.ObjectNotFoundException;
 
@@ -36,6 +39,13 @@ public class ClienteService {
 	private EnderecoRepository enderecoRepository;
 	
 	public Cliente find(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso Negado!!!");
+		}
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
